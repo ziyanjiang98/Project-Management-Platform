@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Platform: Edit project</title>
+    <script src="/static/js/editResource.js"></script>
+</head>
+<body>
+    <div th:replace="~{common/header::topbar}"></div>
+    <div align="center">
+        <label style="color:red" th:text="${msg}"></label><br/>
+    </div>
+    <div align="center">
+        Current Information
+        <table>
+            <thead>
+                <tr>
+                    <th>Project name</th>
+                    <th>Manager</th>
+                    <th>Comment</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td th:text="${item.name}">Project name</td>
+                    <td th:text="${item.manager}">Manager</td>
+                    <td th:text="${item.detail}">Comment</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div align="center">
+        Update Information
+        <table>
+            <thead>
+                <tr>
+                    <th>Project name</th>
+                    <th>Manager</th>
+                    <th>Comment</th>
+                </tr>
+            </thead>
+            <tbody>
+                <form action="/main.html" method="post" th:action="@{/item/checkEditItem}" onsubmit="return true">
+                    <input type="hidden" name="itemId" th:value="${item.id}" />
+                    <tr>
+                        <td><input type="text" required name="name" id="name"></td>
+                        <td><input type="text" required name="manager" id="manager"></td>
+                        <td><input type="text" required name="detail" id="detail"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" align="center">
+                            <input type="submit" id="editSubmit" value="Confirm update">
+                        </td>
+                    </tr>
+                </form>
+            </tbody>
+        </table>
+    </div>
+    <hr/>
+    <div align="center">
+        Current process
+        <table >
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Resource name</th>
+                    <th>Resource unit</th>
+                    <th>Comment</th>
+                    <th>Demand</th>
+                    <th>Supply</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="element, state : ${item.resources}">
+                    <th scope="row" th:text="${element.id}">No</th>
+                    <td th:text="${element.name}">Resource name</td>
+                    <td th:text="${element.unit.name}">Resource unit</td>
+                    <td th:text="${element.detail}">Comment</td>
+                    <td th:text="${element.demand}">Demand</td>
+                    <td th:text="${element.supply}">Supply</td>
+                </tr>
+            </tbody>
+        </table>
+        New resource import
+        <table>
+            <thead>
+                <tr>
+                    <th>Resource name</th>
+                    <th>Change amount</th>
+                    <th>detail</th>
+                </tr>
+            </thead>
+            <tbody>
+            <form action="/main.html" method="post" th:action="@{/item/checkChangeItemResource}" onsubmit="return true">
+                <input type="hidden" name="itemId" th:value="${item.id}" />
+                <tr>
+                    <td>
+                        <select required name="resourceId">
+                            <option value="">--Select--</option>
+                            <option name="opt" th:each="element, state : ${item.resources}" th:text="${element.name}" th:value="${element.id}">Resource name</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="number" required name="change" id="change">
+                    </td>
+                    <td>
+                        <input type="text" required name="detail">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" align="center">
+                        <input type="submit" value="Confirm import">
+                    </td>
+                </tr>
+            </form>
+            </tbody>
+        </table>
+        <a th:href="@{/index}">Go back to menu</a>
+    </div>
+</body>
+</html>

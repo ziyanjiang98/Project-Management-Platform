@@ -1,0 +1,9 @@
+table,th,td,.normal{
+    border: 1px solid;
+    text-align: center;
+}
+
+.money{
+    border: 1px solid;
+    text-align: right;
+}

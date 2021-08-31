@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Platform: Edit resource</title>
+    <script src="/static/js/editResource.js"></script>
+</head>
+<body>
+    <div th:replace="~{common/header::topbar}"></div>
+    <div align="center">
+        <label style="color:red" th:text="${msg}"></label>
+    </div>
+    <link rel="stylesheet" href="/static/css/table.css">
+    <div align="center">
+        Current Information
+        <table>
+            <thead>
+                <tr>
+                    <th>Resource name</th>
+                    <th>Resource unit</th>
+                    <th>Detail</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td th:text="${resource.name}">Resource name</td>
+                    <td th:text="${resource.unit.name}">Resource unit</td>
+                    <td th:text="${resource.detail}">Detail</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div align="center">
+        Update Information
+        <table>
+            <thead>
+                <tr>
+                    <th>Resource name</th>
+                    <th>Resource unit</th>
+                    <th>Detail</th>
+                </tr>
+            </thead>
+            <tbody>
+                <form action="/main.html" method="post" th:action="@{/resource/checkEditResource}" onsubmit="return isEditResourceEmpty()">
+                    <input type="hidden" name="id" th:value="${resource.id}" />
+                    <tr>
+                        <td><input type="text" required name="name" id="name"></td>
+                        <td>
+                            <select required name="unit" id="unit">
+                                <option value="">--Select--</option>
+                                <option value="TON">Ton</option>
+                                <option value ="METRE">Metre</option>
+                                <option value ="SQUARE_METRE">Square metre</option>
+                                <option value="CUBIC_METRE">Cubic metre</option>
+                            </select>
+                        </td>
+                        <td><input type="text" required name="detail" id="detail"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" align="center">
+                            <input type="submit" id="editSubmit" value="Confirm update">
+                        </td>
+                    </tr>
+                </form>
+            </tbody>
+        </table>
+        <a th:href="@{/index}">Go back to menu</a>
+    </div>
+</body>
+</html>

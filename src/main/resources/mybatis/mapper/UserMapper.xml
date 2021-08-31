@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zy.zymonitor.mapper.UserMapper">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap id="User" type="com.zy.zymonitor.bean.User">
+        <id property="id" column="id"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="phone" column="phone"/>
+        <result property="level" column="level"/>
+    </resultMap>
+    <insert id="insertUser" parameterType="com.zy.zymonitor.bean.User" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO zy_user (username,password,phone,`level`)
+        VALUES (#{username},#{password},#{phone},#{level});
+    </insert>
+    <update id="updateUser" parameterType="com.zy.zymonitor.bean.User">
+        UPDATE zy_user
+        SET username = #{username},password = #{password},phone = #{phone},level = #{level}
+        WHERE id = #{id};
+    </update>
+    <delete id="deleteUserById">
+        DELETE FROM zy_user
+        WHERE id = #{id};
+    </delete>
+    <select id="queryUserById" resultMap="User">
+        SELECT *
+        FROM zy_user
+        WHERE id = #{id};
+    </select>
+    <select id="queryUserByName" resultMap="User">
+        SELECT *
+        FROM zy_user
+        WHERE username = #{name};
+    </select>
+    <select id="queryUserByPhone" resultMap="User">
+        SELECT *
+        FROM zy_user
+        WHERE phone = #{phone};
+    </select>
+    <select id="queryAllUsers" resultMap="User">
+        SELECT *
+        FROM zy_user
+    </select>
+</mapper>

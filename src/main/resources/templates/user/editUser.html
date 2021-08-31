@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>项目物资管理平台-编辑用户</title>
+    <script src="/static/js/editUser.js"></script>
+</head>
+<body>
+    <div th:replace="~{common/header::topbar}"></div>
+    <div align="center">
+        该用户当前信息
+        <table>
+            <thead>
+                <tr>
+                    <th>用户名称</th>
+                    <th>手机号</th>
+                    <th>权限级别</th>
+                    <th>更改级别</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td th:text="${user.username}">用户名称</td>
+                    <td th:text="${user.phone}">手机号</td>
+                    <td th:text="${user.level}">权限级别</td>
+                    <td>
+                        <form action="/main.html" method="post" th:action="@{/user/checkEditUser}" onsubmit="return isEditUserEmpty()">
+                            <input type="hidden" name="id" th:value="${user.id}" />
+                            <select name="level" id="level">
+                                <option value="">--请选择--</option>
+                                <option value="1">1级</option>
+                                <option value="2">2级</option>
+                                <option value="3">3级</option>
+                                <option value="4">4级</option>
+                                <option value="5">5级</option>
+                            </select>
+                            <input type="submit" name="editSubmit" value="更改权限">
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

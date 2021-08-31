@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>项目物资管理平台-修改密码</title>
+    <script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="/static/js/change.js"></script>
+    <script>
+        $(document).ready(function(){
+            $("#send").click(function(){
+                var phone = document.getElementById("phone").value;
+                if(!checkChangePhoneFormat(phone)){
+                    alert("手机号格式错误！");
+                    return;
+                }
+                $.ajax({
+                    type: "post",
+                    url: "/pin/sendPinToPhone",
+                    data: {page:"CHANGE_PASSWORD",phone:phone},
+                    async : false,
+                    success: function (data){
+                        alert(data);
+                    }
+                });
+                return;
+            });
+        });
+    </script>
+</head>
+<body>
+    <div th:replace="~{common/header::topbar}"></div>
+    <div align="center">
+        <label style="color:red" th:text="${msg}"></label>
+    </div>
+    <div align="center">
+        <form action="/main.html" method="post" th:action="@{/user/changePassword}" onsubmit="return isChangeFormLegal()">
+            <table>
+                <tr>
+                    <td>用户名</td><td><input type="text" name="username" id="username"></td>
+                </tr>
+                <tr>
+                    <td>手机号</td><td><input type="text" name="phone" id="phone"></td>
+                </tr>
+                <tr>
+                    <td>验证码</td><td><input type="text" name="pin" id="pin"><button type="button" id="send">发送验证码</button></td>
+                </tr>
+                <tr>
+                    <td>新密码</td><td><input type="password" name="password" id="password1"></td>
+                </tr>
+                <tr>
+                    <td>确认新密码</td><td><input type="password" name="repeatPassword" id="password2"></td>
+                </tr>
+            </table>
+            <input type="submit" value="更改密码">
+        </form>
+        <br/>
+        <a th:href="@{/user/login}">返回登录页</a>
+    </div>
+</body>
+</html>

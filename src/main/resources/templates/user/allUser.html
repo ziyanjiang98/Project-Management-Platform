@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>项目物资管理平台-现有用户</title>
+    <style type="text/css">
+        ul li{display:inline; list-style-type:none; padding:5px;}
+    </style>
+    <link rel="stylesheet" href="/static/css/table.css">
+</head>
+<body>
+    <div th:replace="~{common/header::topbar}"></div>
+    <div align="center">
+        <h2>用户列表</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>用户名称</th>
+                <th>手机号</th>
+                <th>权限级别</th>
+                <th>编辑</th>
+                <th>删除</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="element, state : ${page.list}">
+                <th scope="row" th:text="${element.id}">ID</th>
+                <td th:text="${element.username}">用户名称</td>
+                <td th:text="${element.phone}">手机号</td>
+                <td th:text="${element.level}">权限级别</td>
+                <td><a th:href="@{/user/editUser(id=${element.id})}">edit</a></td>
+                <td><a th:href="@{/user/deleteUser(id=${element.id})}">delete</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div align="center">
+        <ul>
+
+            <!-- 首页 -->
+            <li>
+                <a th:href="'/user/allUser?pageNum=1&pageSize=' + ${page.pageSize}">首页</a>
+            </li>
+
+            <!-- 上一页 -->
+            <li th:if="${page.hasPreviousPage}">
+                <a th:href="'/user/allUser?pageNum=' + ${page.prePage} + '&pageSize=' + ${page.pageSize}" th:text="上一页"></a>
+            </li>
+
+            <!-- 中间页 -->
+            <li th:each="num:${#numbers.sequence(1, page.pages)}">
+                <a th:href="'/user/allUser?pageNum=' + ${num} + '&pageSize=' + ${page.pageSize}" th:text="${num}" th:if="${num ne page.pageNum}"></a>
+                <a th:href="'/user/allUser?pageNum=' + ${num} + '&pageSize=' + ${page.pageSize}" th:text="${num}" th:if="${num eq page.pageNum}" style="color:dimgrey"></a>
+            </li>
+
+            <!-- 下一页 -->
+            <li th:if="${page.hasNextPage}">
+                <a th:href="'/user/allUser?pageNum=' + ${page.nextPage}" th:text="下一页"></a>
+            </li>
+
+            <!-- 尾页 -->
+            <li>
+                <a th:href="'/user/allUser?pageNum=' + ${page.pages} + '&pageSize=' + ${page.pageSize}">尾页</a>
+            </li>
+        </ul>
+        <a th:href="@{/index}">返回首页</a>
+    </div>
+</body>
+</html>

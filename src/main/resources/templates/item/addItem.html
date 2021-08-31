@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Platform: Create new project</title>
+    <script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript">
+        //记录现有行数
+        var rows = 1;
+        function addRows() {
+            //克隆现存的模板（第一行）
+            rows++;
+            trElement = document.getElementById("tr_mode").cloneNode(true);
+            tdElement = trElement.childNodes[3];
+            tdElement.innerHTML = "<input type=\"number\" required name='count' value=\"0\">";
+
+            tbody = document.getElementById("tb");
+            tbody.appendChild(trElement);
+            count = document.getElementById("count");
+            count.innerText = "Add up to " + rows + " resources";
+            hiddenCount = document.getElementById("hiddenCount");
+            hiddenCount.value = rows;
+        }
+        function deleteLastRow(){
+            rows--;
+            tbodyElemement = document.getElementById("tb");
+            let count = tbodyElemement.getElementsByTagName("tr").length;
+            lastElementChild = tbodyElemement.lastElementChild;
+            if(count <= 1){
+                alert("The project contains at least one resource!");
+                return;
+            }
+            //通过tobody干掉tr
+            tbodyElemement.removeChild(lastElementChild);
+            count = document.getElementById("count");
+            count.innerText = "Add up to " + rows + " resources";
+            hiddenCount = document.getElementById("hiddenCount");
+            hiddenCount.value = rows;
+        }
+        function isAddItemEmpty(){
+            for (const resource of document.getElementsByName("resource")) {
+                if(resource.value == ""){
+                    alert("Resources type not selected!");
+                    return false;
+                }
+            }
+            for (const count of document.getElementsByName("count")) {
+                if(count.value == 0){
+                    alert("Resources amount can not be 0!");
+                    return false;
+                }
+            }
+            return true;
+        }
+    </script>
+</head>
+<body>
+    <div th:replace="~{common/header::topbar}"></div>
+    <div align="center">
+        <label style="color:red" th:text="${msg}"></label>
+    </div>
+    <div align="center">
+        <form action="/main.html" method="post" th:action="@{/item/checkAddItem}" onsubmit="return isAddItemEmpty()">
+            <table id="infoTable">
+                <thead>
+                    <th>Project name</th>
+                    <th>Manager</th>
+                    <th>Detail</th>
+                </thead>
+                <tbody>
+                    <td>
+                        <input type="text" required name="itemName" id="itemName">
+                    </td>
+                    <td>
+                        <input type="text" required name="manager" id="manager">
+                    </td>
+                    <td>
+                        <input type="text" required name="detail" id="detail">
+                    </td>
+                </tbody>
+            </table>
+            <table name="resourceTable">
+                <thead>
+                    <th>Resource name</th>
+                    <th>Resource Amount</th>
+                </thead>
+                <tbody name="tb" id="tb">
+                    <tr name="tr" id="tr_mode">
+                        <td name="td_resource">
+                            <select name="resource">
+                                <option value="">--Select--</option>
+                                <option name="opt" th:each="element, state : ${resources}" th:text="${element.name} + '/' + ${element.unit.name}" th:value="${element.id}">材料名称</option>
+                            </select>
+                        </td>
+                        <td name="td_count">
+                            <input type="number" required name='count' value="0">
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td align="center" colspan="4" id="count">Add up to 1 resources</td>
+                    <input type="hidden" name="resourceCount" id="hiddenCount" value="1">
+                </tr>
+                <tr>
+                    <td align="center" colspan="4">
+                        <input type="submit" value="Create project">
+                        <button type="button" onclick="addRows()">Add resource</button>
+                        <button type='button' onclick='deleteLastRow()'>Reduce resource</button>
+                    </td>
+                </tr>
+                </tfoot>
+            </table>
+        </form>
+        <a th:href="@{/index}">Go back to menu</a>
+    </div>
+</body>
+</html>

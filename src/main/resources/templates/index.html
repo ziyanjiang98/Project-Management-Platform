@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Platform: Menu</title>
+</head>
+<body>
+    <div th:replace="~{common/header::topbar}"></div>
+    <div align="center">
+        <a th:href="@{/user/logout}">Log out</a><br/>
+    </div>
+    <div align="center">
+        <label style="color:red" th:text="${msg}"></label><br/>
+        <h3>Project</h3>
+        <a th:href="@{/item/addItem}">Create project</a><br/>
+        <a th:href="@{/item/allItems}">Current project</a><br/>
+    </div>
+    <div align="center">
+        <h3>Resource</h3>
+        <a th:href="@{/resource/addResource}">Create resource</a><br/>
+        <a th:href="@{/resource/allResource}">Current resource</a><br/>
+    </div>
+    <div align="center">
+        <h3>User</h3>
+        <a th:href="@{/user/allUser}">Current users</a>
+    </div>
+</body>
+</html>

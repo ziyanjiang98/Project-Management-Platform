@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zy.zymonitor.mapper.ItemMapper">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap id="ItemWithResource" type="com.zy.zymonitor.bean.Item">
+        <result column="item_id" property="id"/>
+        <result column="item_name" property="name"/>
+        <result column="item_manager" property="manager"/>
+        <result column="item_detail" property="detail"/>
+        <collection property="resources" javaType="java.util.ArrayList" ofType="com.zy.zymonitor.bean.Resource"
+                    select="queryResourceWithItemInfo" column="{item_id = item_id}" />
+    </resultMap>
+    <resultMap id="ResourceWithItemInfo" type="com.zy.zymonitor.bean.Resource">
+        <id property="id" column="resource_id"/>
+        <result property="name" column="resource_name"/>
+        <result property="unit" column="resource_unit"/>
+        <result property="detail" column="resource_detail"/>
+        <result property="demand" column="resource_demand"/>
+        <result property="supply" column="resource_supply"/>
+    </resultMap>
+    <resultMap id="ItemResourceChange" type="com.zy.zymonitor.bean.ItemResourceChange">
+        <id property="id" column="id"/>
+        <result property="itemId" column="item_id"/>
+        <result property="resourceId" column="resource_id"/>
+        <result property="username" column="username"/>
+        <result property="time" column="time"/>
+        <result property="change" column="change"/>
+        <result property="detail" column="detail"/>
+    </resultMap>
+    <insert id="insertItem" parameterType="com.zy.zymonitor.bean.Item" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO zy_item (`name`,`manager`,`detail`)
+        VALUES (#{name},#{manager},#{detail});
+    </insert>
+    <insert id="insertItemResource">
+        INSERT INTO zy_item_resource (`item_id`,`resource_id`,`demand`,`supply`)
+        VALUES (#{itemId},#{resourceId},#{demand},0);
+    </insert>
+    <insert id="insertItemResourceChange" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO zy_item_resource_change (`item_id`,`resource_id`,`username`,`time`,`change`,`detail`)
+        VALUES (#{change.itemId},#{change.resourceId},#{change.username},#{change.time},#{change.change},#{change.detail});
+    </insert>
+    <update id="updateItemInfo">
+        UPDATE zy_item
+        SET `name` = #{item.name},manager = #{item.manager},detail = #{item.detail}
+        WHERE id = #{item.id};
+    </update>
+    <update id="updateItemResource">
+        UPDATE zy_item_resource
+        SET supply = supply + #{change}
+        WHERE item_id = #{itemId} AND resource_id = #{resourceId};
+    </update>
+    <delete id="deleteItemById">
+        DELETE FROM zy_item
+        WHERE id = #{itemId};
+    </delete>
+    <delete id="deleteItemResourceById">
+        DELETE FROM zy_item_resource
+        WHERE item_id = #{itemId};
+    </delete>
+    <delete id="deleteItemResourceChangeById">
+        DELETE FROM zy_item_resource_change
+        WHERE item_id = #{itemId};
+    </delete>
+    <select id="queryAllItems" resultMap="ItemWithResource">
+        SELECT id AS item_id, `name` AS item_name, manager AS item_manager, detail AS item_detail
+        FROM zy_item
+    </select>
+    <select id="queryResourceWithItemInfo" resultMap="ResourceWithItemInfo">
+        SELECT ir.item_id AS item_id, ir.resource_id AS resource_id, ir.demand AS resource_demand, ir.supply AS resource_supply,
+               r.name AS resource_name, r.unit AS resource_unit, r.detail AS resource_detail
+        FROM zy_item_resource AS ir
+                LEFT JOIN zy_resource AS r
+                        ON ir.resource_id = r.id
+        <where>
+            item_id = #{item_id} <!-- 变量名 qid 对应上文的 qid -->
+            <!-- 如果上文中 collection只传一个参数column="id",只要类型匹配,在这里随便写个变量名就可以取到值 #{xyz} -->
+        </where>
+    </select>
+    <select id="queryItemById" resultMap="ItemWithResource">
+        SELECT id AS item_id, `name` AS item_name, manager AS item_manager, detail AS item_detail
+        FROM zy_item
+        WHERE id = #{id};
+    </select>
+    <select id="queryAllChangesOfItem" resultMap="ItemResourceChange">
+        SELECT *
+        FROM zy_item_resource_change
+        where item_id = #{itemId}
+    </select>
+    <select id="queryItemByName" resultMap="ItemWithResource">
+        SELECT id AS item_id, `name` AS item_name, manager AS item_manager, detail AS item_detail
+        FROM zy_item
+        WHERE `name` = #{name};
+    </select>
+</mapper>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Platform: 404</title>
+</head>
+<body>
+    <div th:replace="~{common/header::topbar}"></div>
+    <div align="center">
+        <h1>Sorry, there is a mistake on this page!</h1>
+        <h2 th:text="${error}">errorInfo</h2>
+    </div>
+    <br/>
+    <div align="center">
+        <a th:href="@{/index}">Go back to menu</a>
+    </div>
+</body>
+</html>

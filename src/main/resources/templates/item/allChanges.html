@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Platform: history</title>
+    <style type="text/css">
+        ul li{display:inline; list-style-type:none; padding:5px;}
+    </style>
+    <link type="text/css" rel="stylesheet" href="/static/css/table.css">
+</head>
+<body>
+    <div th:replace="~{common/header::topbar}"></div>
+    <div align="center">
+        <h2>Change history</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Project name</th>
+                <th>Resource name</th>
+                <th>Resource unit</th>
+                <th>Change time</th>
+                <th>Change amount</th>
+                <th>Operator</th>
+                <th>Comment</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="element, state : ${page.list}">
+                <th scope="row" th:text="${element.id}">No</th>
+                <th scope="row" th:text="${item.name}">Project name</th>
+                <td th:text="${element.resource.name}">Resource name</td>
+                <td th:text="${element.resource.unit.name}">Resource unit</td>
+                <td th:text="${element.time}">Change time</td>
+                <td th:text="${element.change}">Change amount</td>
+                <td th:text="${element.username}">Operator</td>
+                <td th:text="${element.detail}">Comment</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div align="center">
+        <ul>
+
+            <!-- First -->
+            <li>
+                <a th:href="'/item/allChanges?id=' +  ${item.id} + '&pageNum=1&pageSize=' + ${page.pageSize}">First</a>
+            </li>
+
+            <!-- Previous -->
+            <li th:if="${page.hasPreviousPage}">
+                <a th:href="'/item/allChanges?id=' + ${item.id} + '&pageNum=' + ${page.prePage} + '&pageSize=' + ${page.pageSize}" th:text="Previous"></a>
+            </li>
+
+            <!-- Pages -->
+            <li th:each="num:${#numbers.sequence(1, page.pages)}">
+                <a th:href="'/item/allChanges?id=' + ${item.id} + '&pageNum=' + ${num} + '&pageSize=' + ${page.pageSize}" th:text="${num}" th:if="${num ne page.pageNum}"></a>
+                <a th:href="'/item/allChanges?id=' + ${item.id} + '&pageNum=' + ${num} + '&pageSize=' + ${page.pageSize}" th:text="${num}" th:if="${num eq page.pageNum}" style="color:dimgrey"></a>
+            </li>
+
+            <!-- Next -->
+            <li th:if="${page.hasNextPage}">
+                <a th:href="'/item/allChanges?id=' + ${item.id} + '&pageNum=' + ${page.nextPage}" th:text="Next"></a>
+            </li>
+
+            <!-- Last -->
+            <li>
+                <a th:href="'/item/allChanges?id=' + ${item.id} + '&pageNum=' + ${page.pages} + '&pageSize=' + ${page.pageSize}">Last</a>
+            </li>
+
+        </ul>
+        <a th:href="@{/index}">Go back to menu</a>
+    </div>
+</body>
+</html>

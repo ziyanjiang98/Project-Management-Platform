@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>项目物资管理平台-登录</title>
+    <script src="/static/js/login.js"></script>
+</head>
+<body>
+    <div th:replace="~{common/header::topbar}"></div>
+    <div align="center">
+        <label style="color:red" th:text="${msg}"></label><br/>
+        <form method="post" th:action="@{/user/checkLogin}" onsubmit="return isLoginEmpty();">
+            用户名&emsp;<input type="text" name="username" id="username"><br/>
+            密&emsp;码&emsp;<input type="password" name="password" id="password"><br/>
+            <input type="submit" value="登录">
+        </form>
+    </div>
+    <div align="center">
+        <ul type="square">
+            <li><a th:href="@{/user/register}">用户注册</a></li>
+            <li><a th:href="@{/user/change}">找回密码</a></li>
+        </ul>
+    </div>
+</body>
+</html>

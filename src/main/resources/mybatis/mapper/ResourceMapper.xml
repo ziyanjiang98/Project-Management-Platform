@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zy.zymonitor.mapper.ResourceMapper">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap id="Resource" type="com.zy.zymonitor.bean.Resource">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="unit" column="unit"/>
+        <result property="detail" column="detail"/>
+    </resultMap>
+    <insert id="insertResource" parameterType="com.zy.zymonitor.bean.Resource" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO zy_resource (`name`,`unit`,`detail`)
+        VALUES (#{name},#{unit},#{detail});
+    </insert>
+    <update id="updateResource" parameterType="com.zy.zymonitor.bean.Resource">
+        UPDATE zy_resource
+        SET `name` = #{name},unit = #{unit},detail = #{detail}
+        WHERE id = #{id};
+    </update>
+    <select id="queryResourceById" resultMap="Resource">
+        SELECT *
+        FROM zy_resource
+        WHERE id = #{id};
+    </select>
+    <select id="queryResourceByName" resultMap="Resource">
+        SELECT *
+        FROM zy_resource
+        WHERE `name` = #{name};
+    </select>
+    <select id="queryResourceNum" resultType="int">
+        SELECT count(1)
+        FROM zy_resource;
+    </select>
+    <select id="queryAllResources" resultType="com.zy.zymonitor.bean.Resource">
+    <!--pageHelper使用原始Sql拼接LIMIT语句，一定不要加分号“;”-->
+        SELECT *
+        FROM zy_resource
+    </select>
+</mapper>

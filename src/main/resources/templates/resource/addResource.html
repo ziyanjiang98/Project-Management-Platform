@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Platform: New resource</title>
+    <script src="/static/js/addResource.js"></script>
+</head>
+<body>
+    <div th:replace="~{common/header::topbar}"></div>
+    <div align="center">
+        <label style="color:red" th:text="${msg}"></label><br/>
+        <form action="/main.html" method="post" th:action="@{/resource/checkAddResource}" onsubmit="return isAddResourceEmpty()">
+            <table>
+                <tr>
+                    <td>Resource name</td><td><input name="name" id="name" type="text"></td>
+                </tr>
+                <tr>
+                    <td>Resource unit</td>
+                    <td>
+                        <select name="unit" id="unit">
+                            <option value="">--Select--</option>
+                            <option value="TON">Ton</option>
+                            <option value ="METRE">Metre</option>
+                            <option value ="SQUARE_METRE">Square metre</option>
+                            <option value="CUBIC_METRE">Cubic metre</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Comment</td><td><input name="detail" id="detail" type="text"></td>
+                </tr>
+            </table>
+            <input type="submit" id="addSubmit" value="Add new resource">
+        </form>
+        <br/>
+        <a th:href="@{/index}">Go back to menu</a>
+    </div>
+</body>
+</html>
